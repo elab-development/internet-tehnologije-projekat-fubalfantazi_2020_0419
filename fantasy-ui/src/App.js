@@ -16,7 +16,19 @@ function App() {
 
   return (
     <>
-       
+        <PremierLeagueBadges />
+        <Navigation />
+        <Container className="glavni">
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/create-team" element={<CreateTeam />} />
+                    <Route path="/my-team" element={<MyTeam />} />
+                    <Route path="/admin" element={<Admin />} />
+                </Routes>
+            </BrowserRouter>
+        </Container>
+        <Footer />
     </>
   );
 }
