@@ -1,0 +1,57 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+    font-size: 4rem !important;
+}
+
+p {
+    text-align: center;
+    color: #666;
+    font-size: 2rem;
+}
+
+.premier-league-badges {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  list-style: none;
+}
+
+.premier-league-badges img {
+  width: 50px;
+  height: 50px;
+  margin: 10px;
+}
+
+.premier-league-badges img:hover {
+  transform: scale(1.1);
+}
+
+.glavni {
+    min-height: 80vh;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.footer span {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+}
