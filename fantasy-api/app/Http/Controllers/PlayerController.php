@@ -11,7 +11,7 @@ class PlayerController extends BaseController
 {
     public function index()
     {
-        $players = DB::table('players')->join('teams', 'players.team_id', '=', 'teams.id')->select('players.*', 'teams.team_name')->orderBy('players.player_price', 'desc')->get();
+        $players = DB::table('players')->join('teams', 'players.team_id', '=', 'teams.id')->select('players.*', 'teams.team_name', 'teams.team_short')->orderBy('players.player_price', 'desc')->get();
         return $this->success($players, 'Players retrieved successfully');
     }
 
