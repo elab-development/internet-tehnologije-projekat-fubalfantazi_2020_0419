@@ -24,10 +24,10 @@ class SeedPlayers extends Seeder
        $faker = \Faker\Factory::create();
 
        $priceRange = [
-           'GK' => [4, 6],
-           'DF' => [4, 6.5],
-           'MF' => [5, 10],
-           'FW' => [6, 11],
+           'GK' => [6, 8],
+           'DF' => [6, 8.5],
+           'MF' => [8, 13],
+           'FW' => [9, 15],
        ];
 
          foreach ($teams as $team) {
