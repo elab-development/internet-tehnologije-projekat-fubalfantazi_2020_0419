@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GameController;
 use App\Http\Controllers\GameStatController;
 use App\Http\Controllers\LeagueController;
 use App\Http\Controllers\LeagueMemberController;
@@ -53,11 +54,23 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user-teams-players/{id}', [UserTeamController::class, 'getTeam']);
     Route::post('transfer', [UserTeamController::class, 'transfer']);
 
+    Route::get('games/{roundId}', [GameController::class, 'findByRound']);
+
     //game stats
     Route::get('game-stats/{gameId}', [GameStatController::class, 'findStatsByGame']);
     Route::post('game-stats', [GameStatController::class, 'store']);
 
     //start round
-    Route::post('start-round/{id}', [RoundController::class, 'startRound']);
-    Route::post('end-round/{id}', [RoundController::class, 'endRound']);
+    Route::post('start-round', [RoundController::class, 'startRound']);
+    Route::post('end-round', [RoundController::class, 'endRound']);
+
+    Route::get('active-round', [RoundController::class, 'findActiveRound']);
+    Route::get('ended-rounds', [RoundController::class, 'findEndedRounds']);
+    Route::get('points-per-round/{roundId}', [RoundController::class, 'playerPointsPerRound']);
+    Route::get('user-team', [UserTeamController::class, 'getUserTeam']);
+
+    Route::get('users', [AuthController::class, 'usersWithRoleUser']);
+    Route::post('assign-moderator', [AuthController::class, 'changeToModerator']);
+
+    Route::post('grafik', [UserTeamController::class, 'totalPointsPerPlayerInATeam']);
 });
