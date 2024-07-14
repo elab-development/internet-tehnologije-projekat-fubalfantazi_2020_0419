@@ -15,12 +15,10 @@ return new class extends Migration
             $table->id();
 
             $table->unsignedBigInteger('round_id');
-            $table->unsignedBigInteger('team_id');
             $table->unsignedBigInteger('user_team_id');
             $table->unsignedBigInteger('player_id');
             $table->integer('points');
             $table->foreign('round_id')->references('id')->on('rounds');
-            $table->foreign('team_id')->references('id')->on('teams');
             $table->foreign('user_team_id')->references('id')->on('user_teams');
             $table->foreign('player_id')->references('id')->on('players');
 
