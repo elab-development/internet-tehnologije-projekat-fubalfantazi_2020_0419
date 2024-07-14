@@ -9,6 +9,9 @@ use App\Models\UserRoundTeam;
 use App\Models\UserTeam;
 use App\Models\UserTeamPlayers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class RoundController extends BaseController
 {
@@ -27,14 +30,19 @@ class RoundController extends BaseController
         return $this->error('Round not found', [], 404);
     }
 
-    public function startRound(Request $request, $id)
+    public function startRound(Request $request)
     {
-        $round = Round::find($id);
-        if (!$round) {
-            return $this->error('Round not found', [], 404);
+        $validator = Validator::make($request->all(), [
+            'round_id' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation Error', $validator->errors());
         }
 
-        $round->round_status = Round::STATUS_ACTIVE;
+        $round = Round::find($request->round_id);
+
+        $round->status = Round::STATUS_ACTIVE;
         $round->save();
 
         $allTeamPlayers = UserTeamPlayers::all();
@@ -51,14 +59,19 @@ class RoundController extends BaseController
         return $this->success(new RoundResource($round), 'Round started');
     }
 
-    public function endRound(Request $request, $id)
+    public function endRound(Request $request)
     {
-        $round = Round::find($id);
-        if (!$round) {
-            return $this->error('Round not found', [], 404);
+        $validator = Validator::make($request->all(), [
+            'round_id' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation Error', $validator->errors());
         }
 
-        $round->round_status = Round::STATUS_ENDED;
+        $round = Round::find($request->round_id);
+
+        $round->status = Round::STATUS_ENDED;
         $round->save();
 
         //end round logic - add later
@@ -69,5 +82,42 @@ class RoundController extends BaseController
         }
 
         return $this->success(new RoundResource($round), 'Round ended');
+    }
+
+    public function findActiveRound(Request $request)
+    {
+        $round = Round::where('status', Round::STATUS_ACTIVE)->first();
+        if ($round) {
+            return $this->success(new RoundResource($round), 'Active round found');
+        }
+        return $this->error('Active round not found', [], 404);
+    }
+
+    public function playerPointsPerRound(Request $request, $roundId)
+    {
+
+        $user_id = Auth::id();
+
+        $userTeam = UserTeam::where('user_id', $user_id)->first();
+
+        if (!$userTeam) {
+            return $this->error('User team not found', [], 404);
+        }
+
+        $players = DB::table('round_teams')
+            ->join('players', 'round_teams.player_id', '=', 'players.id')
+            ->join('teams', 'players.team_id', '=', 'teams.id')
+            ->select('players.*', 'teams.team_name', 'teams.team_short', 'round_teams.points')
+            ->where('round_teams.round_id', $roundId)
+            ->where('round_teams.user_team_id', $userTeam->id)
+            ->orderBy('round_teams.points', 'desc')
+            ->get();
+        return $this->success($players, 'Players points per round');
+    }
+
+    public function findEndedRounds(Request $request)
+    {
+        $rounds = Round::where('status', Round::STATUS_ENDED)->get();
+        return $this->success(RoundResource::collection($rounds), 'Ended rounds found');
     }
 }

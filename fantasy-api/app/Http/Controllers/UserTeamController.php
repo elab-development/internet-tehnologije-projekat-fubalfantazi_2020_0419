@@ -6,6 +6,8 @@ use App\Models\Player;
 use App\Models\UserTeam;
 use App\Models\UserTeamPlayers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class UserTeamController extends BaseController
@@ -149,5 +151,47 @@ class UserTeamController extends BaseController
         $player1Position->save();
 
         return $this->success([],'Player transferred successfully');
+    }
+
+    public function getUserTeam(Request $request)
+    {
+        $userId = Auth::id();
+
+        $userTeam = UserTeam::where('user_id', $userId)->first();
+
+        if (!$userTeam) {
+            return $this->error('User Team not found', [], 404);
+        }
+
+        $userTeam->recalculateTotalPoints();
+
+        return $this->success($userTeam, 'User Team retrieved successfully');
+    }
+
+    public function totalPointsPerPlayerInATeam(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_team_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation Error', $validator->errors());
+        }
+
+        $userTeam = UserTeam::find($request->user_team_id);
+
+        if (!$userTeam) {
+            return $this->error('User Team not found', [], 404);
+        }
+
+        $players = DB::table('round_teams')
+            ->select('players.player_name', DB::raw('SUM(round_teams.points) as total_points'))
+            ->join('players', 'round_teams.player_id', '=', 'players.id')
+            ->where('user_team_id', $userTeam->id)
+            ->groupBy('players.player_name')
+            ->having('total_points', '>', 0)
+            ->get();
+
+        return $this->success($players, 'Total points per player in a team retrieved successfully');
     }
 }

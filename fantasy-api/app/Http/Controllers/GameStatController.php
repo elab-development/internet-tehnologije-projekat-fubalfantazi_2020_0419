@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\GameStats;
 use App\Models\Player;
 use App\Models\UserRoundTeam;
+use App\Models\UserTeam;
 use App\Models\UserTeamPlayers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -76,6 +77,12 @@ class GameStatController extends BaseController
         foreach ($userRoundTeam as $team) {
             $team->points = $points;
             $team->save();
+        }
+
+        $userTeams = UserTeam::all();
+
+        foreach ($userTeams as $team) {
+            $team->recalculateTotalPoints();
         }
 
         return $this->success(new GameStatResource($stat), 'Stat created');
