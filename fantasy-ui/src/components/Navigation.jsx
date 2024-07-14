@@ -36,8 +36,14 @@ const Navigation = () => {
                             token && madeTeam ? (
                                 <>
                                     <Nav.Link href="/my-team">My Team</Nav.Link>
+                                    <Nav.Link href="/active-round">Active Round Points</Nav.Link>
+                                    <Nav.Link href="/previous-rounds">Previous Rounds Points</Nav.Link>
                                 </>
                             ) : null
+                        }
+
+                        {
+                            token && (role === 'moderator' || role === 'admin') ? <Nav.Link href="/round-management">Round Management</Nav.Link> : null
                         }
 
                         {

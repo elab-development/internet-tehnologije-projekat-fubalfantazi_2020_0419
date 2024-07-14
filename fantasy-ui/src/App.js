@@ -11,6 +11,9 @@ import CreateTeam from "./pages/CreateTeam";
 import Footer from "./components/Footer";
 import MyTeam from "./pages/MyTeam";
 import Admin from "./pages/Admin";
+import RoundManagment from "./pages/RoundManagment";
+import ActiveRoundPoints from "./pages/ActiveRoundPoints";
+import PreviousRounds from "./pages/PreviousRounds";
 
 function App() {
 
@@ -25,6 +28,10 @@ function App() {
                     <Route path="/create-team" element={<CreateTeam />} />
                     <Route path="/my-team" element={<MyTeam />} />
                     <Route path="/admin" element={<Admin />} />
+                    <Route path="/round-management" element={<RoundManagment />} />
+                    <Route path="/active-round" element={<ActiveRoundPoints />} />
+                    <Route path="/previous-rounds" element={<PreviousRounds />} />
+
                 </Routes>
             </BrowserRouter>
         </Container>

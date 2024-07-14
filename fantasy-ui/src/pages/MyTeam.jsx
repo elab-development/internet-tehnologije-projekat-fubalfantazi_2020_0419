@@ -5,6 +5,8 @@ import {Col, Form, Row} from "react-bootstrap";
 import PlayerCard from "../components/PlayerCard";
 import {FaArrowRight} from "react-icons/fa";
 import useForm from "../hooks/useForm";
+import TotalPointsBox from "../components/TotalPointsBox";
+import ManagerOfTheMonth from "../components/ManagerOfTheMonth";
 
 const MyTeam = () => {
     const [userTeamPlayers, setUserTeamPlayers] = useState([]);
@@ -79,7 +81,8 @@ const MyTeam = () => {
 
     return (
         <>
-            <PageTitle title="My team" subtitle={poruka} />
+            <PageTitle title="My team page" subtitle={poruka} />
+            <TotalPointsBox />
             <Row>
                 {
                     userTeamPlayers.map(player => (
@@ -128,6 +131,7 @@ const MyTeam = () => {
                     </Form.Group>
                 </Col>
             </Row>
+            <ManagerOfTheMonth />
         </>
     );
 };

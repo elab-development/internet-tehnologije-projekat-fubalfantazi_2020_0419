@@ -9,6 +9,34 @@ const Admin = () => {
     const [players, setPlayers] = useState([]);
     const [links, setLinks] = useState([]);
 
+    const [users, setUsers] = useState([]);
+    const [forceUpdate, setForceUpdate] = useState(false);
+
+    const changeRole = (id) => {
+        axiosInstance.post('/assign-moderator', {user_id: id})
+            .then(response => {
+                console.log(response.data);
+                setPoruka('Role changed');
+                setForceUpdate(!forceUpdate);
+            })
+            .catch(error => {
+                console.log(error);
+                setPoruka('Role change failed');
+            });
+    }
+
+    useEffect(() => {
+        axiosInstance.get('/users')
+            .then(response => {
+                console.log(response.data);
+                setUsers(response.data.data);
+            })
+            .catch(error => {
+                console.log(error);
+                setPoruka(error.response.data.message);
+            });
+    }, [forceUpdate]);
+
 
     useEffect(() => {
         axiosInstance.get(url)
@@ -78,6 +106,33 @@ const Admin = () => {
                         ))
                     }
                 </Col>
+            </Row>
+
+            <Row>
+                <Table hover>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {
+                        users && users.map(user => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td><button className="btn btn-info" onClick={
+                                    () => changeRole(user.id)
+                                }>Change role</button></td>
+                            </tr>
+                        ))
+                    }
+                    </tbody>
+                </Table>
             </Row>
         </>
     );
