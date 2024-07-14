@@ -88,4 +88,32 @@ class AuthController extends BaseController
             'team' => new UserTeamResource($userTeam)
         ], 'User created successfully', 201);
     }
+
+    public function usersWithRoleUser(Request $request)
+    {
+        $users = User::where('role', 'user')->get();
+        return $this->success(UserResource::collection($users), 'Users with role user retrieved successfully');
+    }
+
+    public function changeToModerator(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return $this->error('Validation Error', $validator->errors());
+        }
+
+        $user = User::find($request->user_id);
+
+        if (!$user) {
+            return $this->error('User not found', [], 404);
+        }
+
+        $user->role = 'moderator';
+        $user->save();
+
+        return $this->success(new UserResource($user), 'User role changed to moderator');
+    }
 }
