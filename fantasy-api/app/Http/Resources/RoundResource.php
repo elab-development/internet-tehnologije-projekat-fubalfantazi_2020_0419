@@ -18,6 +18,7 @@ class RoundResource extends JsonResource
             'id' => $this->id,
             'round_number' => $this->round_number,
             'round_name' => $this->round_name,
+            'status' => $this->status,
         ];
     }
 }

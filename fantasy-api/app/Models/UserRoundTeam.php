@@ -9,10 +9,9 @@ class UserRoundTeam extends Model
 {
     use HasFactory;
 
-    protected $table = 'user_round_teams';
+    protected $table = 'round_teams';
 
     protected $fillable = [
-        'user_id',
         'round_id',
         'user_team_id',
         'player_id',

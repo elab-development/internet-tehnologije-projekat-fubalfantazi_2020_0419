@@ -10,8 +10,8 @@ class GameStats extends Model
     use HasFactory;
 
     public const GOAL_POINTS_DEF_GK = 6;
-    public const GOAL_POINTS_DEF_MF = 5;
-    public const GOAL_POINTS_DEF_FW = 4;
+    public const GOAL_POINTS_MF = 5;
+    public const GOAL_POINTS_FW = 4;
     public const ASSIST_POINTS = 3;
     public const YELLOW_CARD_POINTS = -1;
     public const RED_CARD_POINTS = -2;
