@@ -5,7 +5,9 @@ import axiosInstance from "../axiosInstance";
 
 const PlayerCard = props => {
     const {player, position, teams} = props;
-    const [team, setTeam] = useState(null);
+    const team = teams.find(team => team.id === player.team_id);
+
+    console.log(player);
 
 
     return (
@@ -14,7 +16,7 @@ const PlayerCard = props => {
                 <Card.Body className="text-center">
                     <Card.Title><h3>({position}) {player.player_name}</h3></Card.Title>
                     <Card.Text>
-                        <span>Team: {teams.find(team => team.id === player.team_id).team_name}</span>
+                        <span>Team: {team ? team.team_name : ''}</span>
                         <br />
                         <span>Value: {player.player_price}M </span>
                     </Card.Text>
